@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAHAYAK AI — Predict. Explain. Support. Learn.</title>
+<style>
+:root{--navy:#1f487e;--blue:#1e76b7;--cyan:#2babb7;--green:#349168;--orange:#eb9126;--purple:#70539a;--bg:#f4f8fb;--ink:#27343e;--muted:#667784;--card:#fff;--line:#d8e2e9}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#173a68,#1e76b7);color:white;padding:22px 5vw}
+header h1{margin:0;font-size:28px}header p{margin:6px 0 0;opacity:.9}
+main{max-width:1150px;margin:22px auto;padding:0 18px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 16px #173a6812}
+h2{font-size:17px;margin:0 0 14px;color:var(--navy)}h3{font-size:14px;margin:18px 0 8px}
+.profile{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+select,input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.metric{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;background:#f5f9fc;margin:7px 0}
+.badge{font-weight:700;padding:6px 10px;border-radius:20px;background:#fff3dc;color:#a76500}
+.reason{padding:9px 11px;border-left:4px solid var(--orange);background:#fffaf1;border-radius:7px;margin:7px 0;font-size:13px}
+.action{padding:9px 11px;border-left:4px solid var(--green);background:#f2faf6;border-radius:7px;margin:7px 0;font-size:13px}
+button{border:0;border-radius:9px;padding:10px 14px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+button.secondary{background:#eaf2f8;color:var(--navy)}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.node{padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:12px;font-weight:700}
+.arrow{color:var(--muted)}
+.small{font-size:12px;color:var(--muted);line-height:1.45}
+.role{display:flex;gap:7px;flex-wrap:wrap}.role button{background:#eef6fb;color:var(--navy)}
+.role button.active{background:var(--navy);color:white}
+footer{max-width:1150px;margin:18px auto;padding:0 18px 25px;font-size:11px;color:var(--muted)}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.profile{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>SAHAYAK AI</h1>
+  <p>Predict. Explain. Support. Learn. — privacy-first welfare decision support</p>
+</header>
+<main>
+<div class="grid">
+<section class="card">
+<h2>Personnel welfare view · synthetic demo</h2>
+<div class="profile">
+<div><label>Duty pattern</label><select id="duty"><option value="0">Stable</option><option value="8" selected>Repeated night duties</option><option value="4">Mixed shifts</option></select></div>
+<div><label>Workload change</label><select id="work"><option value="0">Stable</option><option value="7" selected>Increasing</option><option value="3">Slight increase</option></select></div>
+<div><label>Recovery/rest</label><select id="rest"><option value="0">Stable</option><option value="8" selected>Reduced</option><option value="4">Variable</option></select></div>
+<div><label>Wellbeing check-in</label><select id="well"><option value="0">No change</option><option value="6" selected>Lower than baseline</option><option value="3">Slight change</option></select></div>
+</div>
+<div class="metric"><span>Illustrative welfare-risk index</span><span class="badge" id="risk">29 / 100</span></div>
+<p class="small">This score is a prototype visualization using synthetic inputs. It is not a clinical assessment, diagnosis, or validated field result.</p>
+<h3>WHY is the signal changing?</h3>
+<div id="reasons"></div>
+<h3>Recommended support</h3>
+<div id="actions"></div>
+</section>
+
+<section class="card">
+<h2>What-if simulation</h2>
+<label>Recovery improvement</label>
+<input id="recovery" type="range" min="0" max="10" value="4">
+<div class="metric"><span>Scenario-adjusted index</span><span class="badge" id="scenario">25 / 100</span></div>
+<p class="small">Use this only to explore scenarios such as more recovery time or reduced workload. It does not guarantee an outcome.</p>
+<div class="flow">
+<div class="node">Risk</div><span class="arrow">→</span><div class="node">Reason</div><span class="arrow">→</span>
+<div class="node">Support</div><span class="arrow">→</span><div class="node">Outcome</div><span class="arrow">→</span><div class="node">Learn</div>
+</div>
+<h3>Follow-up outcome</h3>
+<div class="metric"><span>Support accepted</span><strong>Pending</strong></div>
+<div class="metric"><span>Next review</span><strong>7 days</strong></div>
+<button class="secondary" onclick="simulateOutcome()">Record synthetic outcome</button>
+<p id="outcome" class="small"></p>
+<h3>Privacy firewall</h3>
+<ul class="small">
+<li>Personnel: own information + support</li>
+<li>Welfare officers: authorised case context</li>
+<li>Leadership: aggregate welfare trends</li>
+<li>Audit trail + data minimisation + human review</li>
+</ul>
+</section>
+</div>
+
+<section class="card" style="margin-top:18px">
+<h2>Closed-loop learning</h2>
+<div class="flow">
+<div class="node">Detect pattern</div><span class="arrow">→</span>
+<div class="node">Explain drivers</div><span class="arrow">→</span>
+<div class="node">Recommend support</div><span class="arrow">→</span>
+<div class="node">Follow up</div><span class="arrow">→</span>
+<div class="node">Capture outcome</div><span class="arrow">→</span>
+<div class="node">Calibrate</div>
+</div>
+<p class="small">Prototype scope: decision support for welfare workflows. Future extensions may include federated learning, on-device privacy, authorised wearables and multilingual check-ins.</p>
+</section>
+</main>
+<footer>SAHAYAK AI · DEEP THINKERS · SIH26186 · Synthetic demonstration only · Non-clinical prototype</footer>
+<script>
+const ids=['duty','work','rest','well'];
+function calc(){
+ let base=8+ids.reduce((s,id)=>s+Number(document.getElementById(id).value),0);
+ let rec=Number(document.getElementById('recovery').value);
+ let risk=Math.max(0,Math.min(100,base));
+ let scenario=Math.max(0,Math.min(100,base-Math.round(rec*1.1)));
+ document.getElementById('risk').textContent=risk+' / 100';
+ document.getElementById('scenario').textContent=scenario+' / 100';
+ const reasons=[];
+ if(Number(duty.value)>0) reasons.push('Duty pattern is deviating from the personal baseline.');
+ if(Number(work.value)>0) reasons.push('Workload is trending upward.');
+ if(Number(rest.value)>0) reasons.push('Rest/recovery is below the personal baseline.');
+ if(Number(well.value)>0) reasons.push('Voluntary wellbeing check-in is below the recent baseline.');
+ reasonsEl.innerHTML=reasons.map(x=>'<div class="reason">'+x+'</div>').join('');
+ const actions=[];
+ if(Number(rest.value)>0) actions.push('Review recovery opportunity / rest scheduling with authorised welfare staff.');
+ if(Number(work.value)>0) actions.push('Consider workload balancing or temporary task adjustment.');
+ if(Number(well.value)>0) actions.push('Offer a private welfare check-in and available support resources.');
+ actionsEl.innerHTML=actions.map(x=>'<div class="action">'+x+'</div>').join('');
+}
+const reasonsEl=document.getElementById('reasons'), actionsEl=document.getElementById('actions');
+ids.forEach(id=>document.getElementById(id).addEventListener('change',calc));
+document.getElementById('recovery').addEventListener('input',calc);
+function simulateOutcome(){document.getElementById('outcome').textContent='Synthetic outcome recorded: support follow-up completed. A real system would use authorised outcome data to calibrate recommendations.'}
+calc();
+</script>
+</body>
+</html>
